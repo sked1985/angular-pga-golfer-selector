@@ -15,10 +15,7 @@ export class PlayerSelectorService {
 
   getPlayers(): Observable<any> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Ocp-Apim-Subscription-Key': '9a223f53e5de442aa3aca629adae2c5e',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT'
+      'Ocp-Apim-Subscription-Key': '9a223f53e5de442aa3aca629adae2c5e'
     });
 
 
