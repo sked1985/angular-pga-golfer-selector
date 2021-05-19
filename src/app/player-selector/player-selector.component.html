@@ -1,0 +1,37 @@
+<div class="container">
+  <div style="width: 50%;">
+    <label for="new-hero">Name: </label>
+    <input id="new-hero" #heroName />
+
+    <button class="add-button" (click)="add(heroName.value); heroName.value=''">
+      Add Player
+    </button>
+    <button class="add-button" (click)="startDraw()">Start Draw</button>
+  </div>
+  <div class="flex-content">
+    <ul class="heroes">
+      <h2>Players</h2>
+      <li *ngFor="let player of playersList">
+        <a>
+          <span class="badge">{{player.id}}</span> {{player.name}}
+        </a>
+        <span *ngFor="let gf of player.golfers">
+          {{gf.name}}
+        </span>
+        <button class="delete" title="delete hero"
+          (click)="delete(player)">x</button>
+      </li>
+    </ul>
+    <ul class="heroes">
+      <h2>Golfers to choose from</h2>
+      <li *ngFor="let golfer of potentialGolfers">
+        <a>
+          <span class="badge">{{golfer.id}}</span> {{golfer.name}}
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div *ngFor="let message of messageList">
+    {{message}}
+  </div>
+</div>
