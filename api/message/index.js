@@ -1,17 +1,40 @@
+var http = require("https");
+
 module.exports = async function (context, req) {
-    // context.log('JavaScript HTTP trigger function processed a request.');
+  context.log('JavaScript HTTP trigger function processed a request.');
+  var body = "";
+  var options = {
+    host: 'fly.sportsdata.io',
+    path: '/golf/v2/json/PlayerSeasonStats/2021',
+    method: 'GET',
+    headers: {
+      'Ocp-Apim-Subscription-Key': '9a223f53e5de442aa3aca629adae2c5e'
+    }
+  };
 
-    // const name = (req.query.name || (req.body && req.body.name));
-    // const responseMessage = name
-    //     ? "Hello, " + name + ". This HTTP triggered function executed successfully."
-    //     : "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.";
+  var response = '';
+  const request = http.request(options, (res) => {
+    context.log(`statusCode: ${res.statusCode}`);
 
-    // context.res = {
-    //     // status: 200, /* Defaults to 200 */
-    //     body: responseMessage
-    // };
-    context.log('JavaScript HTTP trigger function processed a request.');
-    context.res.json({
-      text: "Hello from the API"
+    res.on('data', (d) => {
+      response += d;
     });
-}
+
+    res.on('end', (d) => {
+      context.res = {
+        body: response
+      };
+      context.log('In here with a result')
+      context.log(context.res.body)
+      context.done();
+    })
+  })
+
+  request.on('error', (error) => {
+    context.log.error(error)
+    context.done();
+  });
+
+  request.write(body);
+  request.end();
+};
