@@ -10,7 +10,8 @@ export class PlayerSelectorService {
   // dev
   // private statsUrl = 'http://localhost:4200/api/json/PlayerSeasonStats/2021';
   // prod
-  private statsUrl = 'https://witty-sea-0be26fd03.azurestaticapps.net/api/json/PlayerSeasonStats/2021';
+  // private statsUrl = 'https://witty-sea-0be26fd03.azurestaticapps.net/api/json/PlayerSeasonStats/2021';
+  private statsUrl = 'https://fly.sportsdata.io/golf/v2/json/PlayerSeasonStats/2021';
 
   constructor(
     private http: HttpClient
