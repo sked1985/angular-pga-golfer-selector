@@ -7,7 +7,10 @@ import { tap, catchError, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class PlayerSelectorService {
-  private statsUrl = 'https://fly.sportsdata.io/golf/v2/json/PlayerSeasonStats/2021';
+  // dev
+  // private statsUrl = 'http://localhost:4200/api/json/PlayerSeasonStats/2021';
+  // prod
+  private statsUrl = 'https://witty-sea-0be26fd03.azurestaticapps.net/api/json/PlayerSeasonStats/2021';
 
   constructor(
     private http: HttpClient
