@@ -11,6 +11,7 @@ export class PlayerSelectorComponent implements OnInit {
   allGolfersList: Golfer[] = [];
   potentialGolfers: Golfer[] = [];
   messageList: string[] = [];
+  golferPerPlayer = 0;
 
   constructor(
     private playerSelectorService: PlayerSelectorService
@@ -23,6 +24,11 @@ export class PlayerSelectorComponent implements OnInit {
       });
   }
 
+  setGolferPerPlayer(value: string) {
+    // tslint:disable-next-line:radix
+    this.golferPerPlayer = parseInt(value);
+  }
+
   chooseRandomPlayer(playersInDraw) {
     return playersInDraw[Math.floor(Math.random() * playersInDraw.length)];
   }
@@ -30,10 +36,16 @@ export class PlayerSelectorComponent implements OnInit {
   startDraw() {
     let playersInDraw = [...this.playersList];
     this.potentialGolfers = [];
+
     if (this.playersList && this.playersList.length === 0) {
       alert('At least one player is required');
     }
-    this.selectTopGolfers(this.playersList.length * 2);
+
+    if (!this.golferPerPlayer || this.golferPerPlayer === 0) {
+      alert('Golfers per player must be set');
+    }
+
+    this.selectTopGolfers(this.playersList.length * this.golferPerPlayer);
 
     this.potentialGolfers.forEach((pg, index) => {
       const interval = 1000;
@@ -42,7 +54,7 @@ export class PlayerSelectorComponent implements OnInit {
         this.messageList.push(`Player picked is ${playerToPick.name}`);
         this.messageList.push(`${playerToPick.name} has drawn ${pg.name}`);
         playerToPick.golfers.push(pg);
-        if (playerToPick.golfers.length === 2) {
+        if (playerToPick.golfers.length === this.golferPerPlayer) {
           playersInDraw = playersInDraw.filter(p => p.id !== playerToPick.id);
         }
         this.potentialGolfers = this.potentialGolfers.filter(gf => gf.id !== pg.id);

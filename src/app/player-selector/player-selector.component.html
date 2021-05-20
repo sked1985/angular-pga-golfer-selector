@@ -1,12 +1,17 @@
 <div class="container">
-  <div style="width: 50%;">
-    <label for="new-hero">Name: </label>
-    <input id="new-hero" #heroName />
-
-    <button class="add-button" (click)="add(heroName.value); heroName.value=''">
+  <div>
+    <div style="width: 50%;">
+      <label for="new-player">Name: </label>
+      <input id="new-player" #playerName />
+      <label for="golfer-per-player">Golfer per player:</label>
+      <input id="golfer-per-player" #golferPerPlayer  (change)="setGolferPerPlayer(golferPerPlayer.value)" type="number"/>
+    </div>
+    <button class="add-button" (click)="add(playerName.value); playerName.value=''">
       Add Player
     </button>
-    <button class="add-button" (click)="startDraw()">Start Draw</button>
+    <button class="add-button" (click)="startDraw()">
+      Start Draw
+    </button>
   </div>
   <div class="flex-content">
     <ul class="heroes">
@@ -18,7 +23,7 @@
         <span *ngFor="let gf of player.golfers">
           {{gf.name}}
         </span>
-        <button class="delete" title="delete hero"
+        <button class="delete" title="delete player"
           (click)="delete(player)">x</button>
       </li>
     </ul>
