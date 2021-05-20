@@ -18,18 +18,7 @@ export class PlayerSelectorService {
   ) { }
 
   getPlayers(): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Ocp-Apim-Subscription-Key': '9a223f53e5de442aa3aca629adae2c5e',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT'
-    });
-
-
-    const options = {
-      headers
-    };
-    return this.http.get<any>(this.statsUrl, options)
+    return this.http.get('/api/message')
       .pipe(
         tap(resp => {
           console.log(resp);
@@ -40,5 +29,27 @@ export class PlayerSelectorService {
           }
         })
       );
+    // const headers = new HttpHeaders({
+    //   'Content-Type': 'application/json',
+    //   'Ocp-Apim-Subscription-Key': '9a223f53e5de442aa3aca629adae2c5e',
+    //   'Access-Control-Allow-Origin': '*',
+    //   'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT'
+    // });
+
+
+    // const options = {
+    //   headers
+    // };
+    // return this.http.get<any>(this.statsUrl, options)
+    //   .pipe(
+    //     tap(resp => {
+    //       console.log(resp);
+    //     }),
+    //     map(resp => {
+    //       if (resp) {
+    //         return resp;
+    //       }
+    //     })
+    //   );
   }
 }
