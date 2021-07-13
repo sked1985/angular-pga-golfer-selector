@@ -21,6 +21,11 @@ export class PlayerSelectorComponent implements OnInit {
     this.playerSelectorService.getPlayers()
       .subscribe(response => {
         this.allGolfersList = response.map((golfer, index) => new Golfer(golfer.PlayerID, golfer.Name, index + 1));
+        this.allGolfersList = this.allGolfersList.filter(gl => () => {
+          if (gl.name !== 'Zach Johnson' && gl.name !== 'Hideki Matsuyama') {
+            return gl;
+          }
+        });
       });
   }
 
