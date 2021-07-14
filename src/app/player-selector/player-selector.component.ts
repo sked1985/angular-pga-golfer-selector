@@ -23,7 +23,7 @@ export class PlayerSelectorComponent implements OnInit {
         this.allGolfersList = [];
         const max = 100;
         for (let i = 0; i < max; i++) {
-          if (response[i].Name !== 'Zach Johnson' || response[i].Name !== 'Hideki Matsuyama') {
+          if (response[i].Name !== 'Zach Johnson' && response[i].Name !== 'Hideki Matsuyama') {
             this.allGolfersList.push(new Golfer(response[i].PlayerID, response[i].Name, i + 1));
           }
         }
