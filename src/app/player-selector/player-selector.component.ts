@@ -25,6 +25,7 @@ export class PlayerSelectorComponent implements OnInit {
         for (let i = 0; i < max; i++) {
           if (
             response[i].Name !== 'Ian Poulter' &&
+            response[i].Name !== 'Phil Mickelson' &&
             response[i].Name !== 'Martin Kaymer' &&
             response[i].Name !== 'Henrik Stenson' &&
             response[i].Name !== 'Matt Kuchar' &&
@@ -67,12 +68,21 @@ export class PlayerSelectorComponent implements OnInit {
       setTimeout(() => {
         const playerToPick = this.chooseRandomPlayer(playersInDraw);
         this.messageList.push(`Player picked is ${playerToPick.name}`);
-        this.messageList.push(`${playerToPick.name} has drawn ${pg.name}`);
-        playerToPick.golfers.push(pg);
-        if (playerToPick.golfers.length === this.golferPerPlayer) {
-          playersInDraw = playersInDraw.filter(p => p.id !== playerToPick.id);
+
+        if (index === this.potentialGolfers.length) {
+          this.messageList.push(`${playerToPick.name} has drawn TIGER!!!!!!!!!!!!!!!!`);
+          playerToPick.golfers.push(new Golfer(parseInt('40000019'), 'Tiger Woods', 900))
+          this.potentialGolfers = [];
+        } else {
+          this.messageList.push(`${playerToPick.name} has drawn ${pg.name}`);
+          playerToPick.golfers.push(pg);
+
+          if (playerToPick.golfers.length === this.golferPerPlayer) {
+            playersInDraw = playersInDraw.filter(p => p.id !== playerToPick.id);
+          }
+
+          this.potentialGolfers = this.potentialGolfers.filter(gf => gf.id !== pg.id);
         }
-        this.potentialGolfers = this.potentialGolfers.filter(gf => gf.id !== pg.id);
       }, index * interval);
     });
   }
