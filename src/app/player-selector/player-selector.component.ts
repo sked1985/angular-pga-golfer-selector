@@ -23,16 +23,19 @@ export class PlayerSelectorComponent implements OnInit {
         this.allGolfersList = [];
         const max = 100;
         for (let i = 0; i < max; i++) {
-          if (response[i].Name !== 'Zach Johnson' && response[i].Name !== 'Hideki Matsuyama') {
-            this.allGolfersList.push(new Golfer(response[i].PlayerID, response[i].Name, i + 1));
+          if (
+            response[i].Name !== 'Ian Poulter' &&
+            response[i].Name !== 'Martin Kaymer' &&
+            response[i].Name !== 'Henrik Stenson' &&
+            response[i].Name !== 'Matt Kuchar' &&
+            response[i].Name !== 'Rickie Fowler'
+          ) {
+            this.allGolfersList.push(
+              new Golfer(response[i].PlayerID, response[i].Name, i + 1)
+            );
           }
         }
-        // const allGolfersListResponse = response.map((golfer, index) => new Golfer(golfer.PlayerID, golfer.Name, index + 1));
-        // this.allGolfersList = allGolfersListResponse.filter(gl => () => {
-        //   if ((gl.name !== 'Zach Johnson') || (gl.name !== 'Hideki Matsuyama')) {
-        //     return gl;
-        //   }
-        // });
+
       });
   }
 
