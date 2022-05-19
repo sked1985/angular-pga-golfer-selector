@@ -6,39 +6,20 @@ import { PlayerSelectorService } from './player-selector.service';
   templateUrl: './player-selector.component.html',
   styleUrls: ['./player-selector.component.scss']
 })
-export class PlayerSelectorComponent implements OnInit {
+export class PlayerSelectorComponent {
   playersList: Player[] = [];
+  excludedGolfers = [];
+  includedGolfers = [];
   allGolfersList: Golfer[] = [];
   potentialGolfers: Golfer[] = [];
   messageList: string[] = [];
   golferPerPlayer = 0;
+  ganeStarted = false;
 
   constructor(
     private playerSelectorService: PlayerSelectorService
   ) { }
 
-  ngOnInit(): void {
-    this.playerSelectorService.getPlayers()
-      .subscribe(response => {
-        this.allGolfersList = [];
-        const max = 100;
-        for (let i = 0; i < max; i++) {
-          if (
-            response[i].Name !== 'Ian Poulter' &&
-            response[i].Name !== 'Phil Mickelson' &&
-            response[i].Name !== 'Martin Kaymer' &&
-            response[i].Name !== 'Henrik Stenson' &&
-            response[i].Name !== 'Matt Kuchar' &&
-            response[i].Name !== 'Rickie Fowler'
-          ) {
-            this.allGolfersList.push(
-              new Golfer(response[i].PlayerID, response[i].Name, i + 1)
-            );
-          }
-        }
-
-      });
-  }
 
   setGolferPerPlayer(value: string) {
     // tslint:disable-next-line:radix
@@ -50,41 +31,56 @@ export class PlayerSelectorComponent implements OnInit {
   }
 
   startDraw() {
-    let playersInDraw = [...this.playersList];
-    this.potentialGolfers = [];
-
     if (this.playersList && this.playersList.length === 0) {
       alert('At least one player is required');
+      return;
     }
 
     if (!this.golferPerPlayer || this.golferPerPlayer === 0) {
       alert('Golfers per player must be set');
+      return;
     }
-
-    this.selectTopGolfers(this.playersList.length * this.golferPerPlayer);
-
-    this.potentialGolfers.forEach((pg, index) => {
-      const interval = 1000;
-      setTimeout(() => {
-        const playerToPick = this.chooseRandomPlayer(playersInDraw);
-        this.messageList.push(`Player picked is ${playerToPick.name}`);
-
-        if (index === this.potentialGolfers.length) {
-          this.messageList.push(`${playerToPick.name} has drawn TIGER!!!!!!!!!!!!!!!!`);
-          playerToPick.golfers.push(new Golfer(parseInt('40000019'), 'Tiger Woods', 900))
-          this.potentialGolfers = [];
-        } else {
-          this.messageList.push(`${playerToPick.name} has drawn ${pg.name}`);
-          playerToPick.golfers.push(pg);
-
-          if (playerToPick.golfers.length === this.golferPerPlayer) {
-            playersInDraw = playersInDraw.filter(p => p.id !== playerToPick.id);
+    this.ganeStarted = true;
+    this.playerSelectorService.getPlayers()
+      .subscribe(response => {
+        this.allGolfersList = [];
+        const max = 100;
+        for (let i = 0; i < max; i++) {
+          if (!this.excludedGolfers.includes(response[i].Name)) {
+            this.allGolfersList.push(
+              new Golfer(response[i].PlayerID, response[i].Name, i + 1)
+            );
           }
-
-          this.potentialGolfers = this.potentialGolfers.filter(gf => gf.id !== pg.id);
         }
-      }, index * interval);
-    });
+
+        let playersInDraw = [...this.playersList];
+        this.potentialGolfers = [];
+
+        this.selectTopGolfers(this.playersList.length * this.golferPerPlayer);
+
+        if (this.includedGolfers && this.includedGolfers.length) {
+          this.potentialGolfers.splice(this.potentialGolfers.length - this.includedGolfers.length, this.includedGolfers.length);
+          this.potentialGolfers = this.potentialGolfers.concat(this.includedGolfers);
+        }
+
+        this.potentialGolfers.forEach((pg, index) => {
+          const interval = 1000;
+          setTimeout(() => {
+            const playerToPick = this.chooseRandomPlayer(playersInDraw);
+            this.messageList.push(`Player picked is ${playerToPick.name}`);
+
+            this.messageList.push(`${playerToPick.name} has drawn ${pg.name}`);
+              playerToPick.golfers.push(pg);
+
+              if (playerToPick.golfers.length === this.golferPerPlayer) {
+                playersInDraw = playersInDraw.filter(p => p.id !== playerToPick.id);
+              }
+
+              this.potentialGolfers = this.potentialGolfers.filter(gf => gf.id !== pg.id);
+          }, index * interval);
+        });
+
+      });
   }
 
   selectTopGolfers(numOfGolfersToPick) {
@@ -108,6 +104,14 @@ export class PlayerSelectorComponent implements OnInit {
 
   delete(player: Player): void {
     this.playersList = this.playersList.filter(h => h !== player);
+  }
+
+  excludeGolfer(golfer) {
+    this.excludedGolfers.push(golfer);
+  }
+
+  includeGolfer(golfer) {
+    this.includedGolfers.push(new Player(33, golfer, []));
   }
 
 }

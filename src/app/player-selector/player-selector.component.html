@@ -1,42 +1,105 @@
 <div class="container">
-  <div>
-    <div style="width: 50%;">
-      <label for="new-player">Name: </label>
-      <input id="new-player" #playerName />
+  <div *ngIf="!ganeStarted">
+    <div style="width: 50%">
+      <!--Name-->
+      <div>
+        <label for="new-player">Name: </label>
+        <input id="new-player" #playerName />
+        <button
+          class="add-button"
+          (click)="add(playerName.value); playerName.value = ''"
+        >
+          Add Player
+        </button>
+      </div>
+      <div>
+        <label for="golfer-exclude"
+          >Golfer to exclude: (Injured Players etc...)</label
+        >
+        <input
+          id="golfer-exclude"
+          #excludedGolfer
+        />
+        <button
+        class="add-button"
+        (click)="excludeGolfer(excludedGolfer.value); excludedGolfer.value = ''"
+      >
+        Exclude Player
+      </button>
+      </div>
+      <div>
+        <label for="golfer-include"
+          >Golfer to include: (Wildcard players that may not be top ranked. Tiger for eg...)</label
+        >
+        <input
+          id="golfer-include"
+          #includedGolfer
+        />
+        <button
+        class="add-button"
+        (click)="includeGolfer(includedGolfer.value); includedGolfer.value = ''"
+      >
+        Include Player
+      </button>
+      </div>
+
+      <!--Golfer per player-->
       <label for="golfer-per-player">Golfer per player:</label>
-      <input id="golfer-per-player" #golferPerPlayer  (change)="setGolferPerPlayer(golferPerPlayer.value)" type="number"/>
+      <input
+        id="golfer-per-player"
+        #golferPerPlayer
+        (change)="setGolferPerPlayer(golferPerPlayer.value)"
+        type="number"
+      />
     </div>
-    <button class="add-button" (click)="add(playerName.value); playerName.value=''">
-      Add Player
-    </button>
-    <button class="add-button" (click)="startDraw()">
-      Start Draw
-    </button>
+    <button class="add-button" (click)="startDraw()">Start Draw</button>
   </div>
   <div class="flex-content">
     <ul class="heroes">
       <h2>Players</h2>
       <li *ngFor="let player of playersList">
         <a>
-          <span class="badge">{{player.id}}</span> {{player.name}}
+          <span class="badge">{{ player.id }}</span> {{ player.name }}
         </a>
         <span *ngFor="let gf of player.golfers">
-          {{gf.name}}
+          {{ gf.name }}
         </span>
-        <button class="delete" title="delete player"
-          (click)="delete(player)">x</button>
+        <button class="delete" title="delete player" (click)="delete(player)">
+          x
+        </button>
       </li>
     </ul>
     <ul class="heroes">
       <h2>Golfers to choose from</h2>
       <li *ngFor="let golfer of potentialGolfers">
         <a>
-          <span class="badge">{{golfer.id}}</span> {{golfer.name}}
+          <span class="badge">{{ golfer.id }}</span> {{ golfer.name }}
         </a>
+      </li>
+    </ul>
+    <ul class="heroes">
+      <h2>Golfers to exclude</h2>
+      <li *ngFor="let golfer of excludedGolfers">
+        {{golfer}}
+      </li>
+    </ul>
+    <ul class="heroes">
+      <h2>Golfers to include</h2>
+      <li *ngFor="let golfer of includedGolfers">
+        {{golfer.name}}
       </li>
     </ul>
   </div>
   <div *ngFor="let message of messageList">
-    {{message}}
+    {{ message }}
+  </div>
+  <div>
+    <button *ngIf="ganeStarted" class="add-button" (click)="ganeStarted = false" style="position: absolute;
+    top: 0;
+    right: 0;
+    background-color: hotpink;
+    color: white;">
+     New Game
+    </button>
   </div>
 </div>
